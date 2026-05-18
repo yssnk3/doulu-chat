@@ -14,6 +14,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
 .msg.user{align-self:flex-end;background:#95ec69;color:#1a1a1a;border-bottom-right-radius:4px}
 .msg.bot{align-self:flex-start;background:#fff;color:#1a1a1a;border-bottom-left-radius:4px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
 .msg.bot.typing{color:#999}
+.sticker{display:inline-block;background:#e8e8e8;border-radius:4px;padding:0 5px;font-size:13px;color:#666;white-space:nowrap}
 .input-wrap{background:#fff;border-top:1px solid #e8e8e8;padding:10px 14px;display:flex;gap:10px;align-items:flex-end;position:sticky;bottom:0}
 .input-wrap textarea{flex:1;border:1px solid #e0e0e0;border-radius:20px;padding:10px 16px;font-size:15px;resize:none;outline:none;max-height:120px;font-family:inherit;line-height:1.4}
 .input-wrap textarea:focus{border-color:#95ec69}
@@ -25,7 +26,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
 <body>
 <div class="header">
   逗鹿
-  <span>INTP · 自嘲式幽默 · 思维跳跃</span>
+  <span>INTP · 高三艺术生 · 脑回路清奇</span>
 </div>
 <div class="chat" id="chat"></div>
 <div class="input-wrap">
@@ -41,7 +42,7 @@ localStorage.setItem('sid',sid);
 function addMsg(text,role){
   const div=document.createElement('div');
   div.className='msg '+role;
-  div.textContent=text;
+  div.innerHTML=text.replace(/\[([^\]]+)\]/g,'<span class="sticker">[$1]</span>');
   chat.appendChild(div);
   chat.scrollTop=chat.scrollHeight;
 }
