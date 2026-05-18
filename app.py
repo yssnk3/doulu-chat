@@ -27,7 +27,9 @@ system_prompt = load_prompt()
 
 conversations = {}
 
-client = OpenAI(api_key=API_KEY, base_url=API_BASE)
+# Defer client init to avoid crash on startup if env vars are missing
+def get_client():
+    return OpenAI(api_key=API_KEY, base_url=API_BASE)
 
 @app.route("/")
 def index():
@@ -40,6 +42,12 @@ def chat():
     user_msg = data.get("message", "").strip()
     if not user_msg:
         return jsonify({"error": "empty message"}), 400
+    if not API_KEY:
+        return jsonify({"error": "API_KEY 环境变量未设置，请在 Railway Variables 中配置"}), 500
+    try:
+        client = get_client()
+    except Exception as e:
+        return jsonify({"error": f"OpenAI 客户端初始化失败: {str(e)}"}), 500
     if session_id not in conversations:
         conversations[session_id] = [{"role": "system", "content": system_prompt}]
     conversations[session_id].append({"role": "user", "content": user_msg})
